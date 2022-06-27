@@ -1,0 +1,11 @@
+# Success
+ERROR_CODE_SUCCESS = 200
+ERROR_CODE_SUCCESS_MSG = 'Success.'
+
+# API Error
+ERROR_CODE_BAD_REQUEST = 400
+ERROR_CODE_BAD_REQUEST_MSG = 'Bad Request.'
+
+# Server Error
+ERROR_UNKNOWN = 500
+ERROR_UNKNOWN_MSG = 'Unknown Error.'

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>여행지</title>
+    {% include 'header.html' %}
+</head>
+<body>
+	<div id="wrap">
+        <h1>여행 일지</h1>
+		<br>
+        <div id="searchPlace">
+            <div class="area-box">
+                <h3>여행지</h3>
+                <hr>
+                <select name="contentTypeId" class="form-control">
+                    {% for i in placeType %}
+                        <option value="{{i.typeCode}}">{{i.typeContent}}</option>
+                    {% endfor %}
+                </select>
+                <input type="search" id="input-search" class="form-control">
+                <button class="btn btn-primary btn-firstclass" id="search-opendata">검색</button>
+                <label for="upfile" class="btn btn-primary">업로드</label>
+                <!--pagination-->
+                <table id="placeList" class="table">
+                    <thead>
+                    <tr>
+                        <th class="title">여행지 명</th>
+                        <th>주소</th>
+                    </tr>
+                    </thead>
+                    <tbody><tr><td colspan="2"></td></tr></tbody>
+                </table>
+                <ul class="pagination"></ul>
+            </div>
+            <div class="area-box" id="selectResult">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">
+                                <input type="text" class="form-control" name="placeName" required><br>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <img id="placeImg" class="image" src="" alt="사진없음">
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                위도
+                            </th>
+                            <td>
+                                <input type="text" class="form-control" style="width:100px;" name="placeLat" required>
+                            </td>
+                            <th>
+                                경도
+                            </th>
+                            <td>
+                                <input type="text" class="form-control" style="width:100px;" name="placeLon" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                주소
+                            </th>
+                            <td colspan="3">
+                                <input type="text" class="form-control" style="width:300px;" name="placeAddress" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                지역 코드
+                            </th>
+                            <td>
+                                <select name="area" class="form-control">
+                                    {% for i in areaCode %}
+                                    <option value="{{i.areaNo}}">{{i.sido}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <th>
+                                여행지 타입
+                            </th>
+                            <td>
+                                <select name="typeCode" class="form-control">
+                                    {% for i in placeType %}
+                                    <option value="{{i.typeCode}}">{{i.typeContent}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input id="upfile" type="file" name="upfile" onchange="changeImg(this);" accept="image/*">
+                <input type="hidden" name="imgPath">
+            </div>
+            <div class="area-box">
+                <div id="tag-tab">
+                    <h4>태그</h4>
+                    <div id="tags">
+                        <ul style="display:inline-block;margin:0;padding:0;"></ul>
+                        <input type="text" class="form-control" style="width:100px;" id="tagNow">
+                        <input type="hidden" name="placeTags">
+                    </div>
+                    <br>
+                </div>
+                <div id="description">
+                    <h4>설명</h4>
+                    <textarea name="placeDes" class="form-control" cols="120" rows="10"></textarea>
+                </div><br>
+                <div id="btns-center">
+                    <button type="button" onclick="clearAll();" class="btn btn-warning">리셋</button>
+                    <button type="button" onclick="location.href='list';" class="btn btn-secondary">목록</button>
+                    <button type="button" onclick="return checkIntegrity();" class="btn btn-primary">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
