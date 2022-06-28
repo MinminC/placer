@@ -23,7 +23,7 @@ def index():
 def search_place():
     """
     여행지를 오픈데이터에서 검색
-    :return:
+    :return: 응답 결과, 응답 코드
     """
     # 요청 값 확인
     try:
@@ -38,9 +38,6 @@ def search_place():
     if status != ERROR_CODE_SUCCESS:
         return jsonify(status=status, msg=msg), status
 
-    # Response 생성 및 응답
-    # result['status'] = status
-    # result['msg'] = msg
     json_string = json.dumps(result, ensure_ascii=False)
     response = Response(json_string, content_type='application/json; charset=utf-8')
 
