@@ -84,13 +84,16 @@ function ajaxSearchPlace(keyword, pageNo){
             },
         success: function(result){
             render(result, keyword, pageNo, contentTypeId);
+        },
+        error: function(result){
+            alert('['+result.responseJSON['status']+'] '+result.responseJSON['msg']);
         }
     })
 }
 
 // 작성한 일지를 저장하도록 AJAX 요청
 function checkIntegrity(){
-    //태그를 하나로 묶기
+    // 태그를 하나로 묶기
     var tagArr = [];
     var $tags = $('#tags span');
     for(var i = 0; i<$tags.length; i++)
@@ -98,12 +101,12 @@ function checkIntegrity(){
     var tagStr = tagArr.join(',');
     $('input[name=placeTags]').val(tagStr);
 
-    //내용 삽입
+    // 내용 삽입
     if(!$('textarea[name=placeDes]').val()){
         alert('내용 넣어요!!!!');
         return false;
     }
-    //사진의 주소를 input 태그에 저장 TODO
+    // 사진의 주소를 input 태그에 저장 TODO
     var imgPath = $('#placeImg').prop('src');
     if(imgPath == 'http://localhost:8112/firstclass/insertForm.pl'){//이미지가 없는 경우 현재 주소 반환됨
         alert('이미지를 등록해주세요!');
@@ -132,35 +135,34 @@ function changeImg(picture){
 // 여행지 정보를 출력 TODO
 function render(result, keyword, pageNo, contentTypeId){
     var currentPage = pageNo;
-    //페이징바 10개, 총 게시글은 5개씩 보여주기
-        var listCount = Number($(result).find('totalCount').text());
-        var currentPage = Number($(result).find('pageNo').text());
-        var pageLimit = Number($(result).find('numOfRows').text());
-        var boardLimit = 10;
-        var maxPage = Math.ceil(listCount/boardLimit);
-        var startPage = (currentPage -1)/pageLimit * pageLimit +1;
-        var endPage = startPage + pageLimit -1;
+    // 페이징바 10개, 총 게시글은 5개씩 보여주기
+    var listCount = Number($(result).find('totalCount').text());
+    var currentPage = Number($(result).find('pageNo').text());
+    var pageLimit = Number($(result).find('numOfRows').text());
+    var boardLimit = 10;
+    var maxPage = Math.ceil(listCount/boardLimit);
+    var startPage = (currentPage -1)/pageLimit * pageLimit +1;
+    var endPage = startPage + pageLimit -1;
 
-        if(endPage > maxPage)
-            endPage = maxPage;
+    if(endPage > maxPage)
+        endPage = maxPage;
 
-        var value='';
+    var value='';
+    if(currentPage != 1)
+        value += '<li class="page-item"><a class="page-link" onclick="ajaxSearchPlace('+"'"+keyword+"'"+', '+(pageNo-1)+');">&lt;</a></li>';
+    for(var i=1;i<endPage+1;i++){
+        value += '<li class="page-item';
+        if(currentPage == i)
+            value += ' active';
+        value += '"><a class="page-link" onclick="ajaxSearchPlace('+"'"+keyword+"'"+', '+i+');">'+i+'</a></li>';
+    }
+    if(currentPage<maxPage)
+        value += '<li class="page-item endPage"><a class="page-link" onclick="ajaxSearchPlace('+"'"+keyword+"', "+(pageNo+1)+');">&gt;</a></li>';
+    $('.pagination').html(value);
 
-        if(currentPage != 1)
-            value += '<li class="page-item"><a class="page-link" onclick="ajaxSearchPlace('+"'"+keyword+"'"+', '+(pageNo-1)+');">&lt;</a></li>';
-        for(var i=1;i<endPage+1;i++){
-            value += '<li class="page-item';
-            if(currentPage == i)
-                value += ' active';
-            value += '"><a class="page-link" onclick="ajaxSearchPlace('+"'"+keyword+"'"+', '+i+');">'+i+'</a></li>';
-        }
-        if(currentPage<maxPage)
-            value += '<li class="page-item endPage"><a class="page-link" onclick="ajaxSearchPlace('+"'"+keyword+"', "+(pageNo+1)+');">&gt;</a></li>';
-        $('.pagination').html(value);
-
-        var itemArr = $(result).find('item');
-        var value = '';
-        itemArr.each(function(i, item){//인덱스, 해당 인덱스에서의 값
+    var itemArr = $(result).find('item');
+    var value = '';
+    itemArr.each(function(i, item){ // 인덱스, 해당 인덱스에서의 값
 
         value += '<tr><td class="title">'+$(item).find('title').text()//이름
             +'</td><td class="address">'+$(item).find('addr1').text()+' '+$(item).find('addr2').text()//주소

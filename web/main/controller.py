@@ -1,11 +1,9 @@
-import os
 import json
-from io import BytesIO
 
+from mods import *
 from web import app
 from web.main import service
-from flask import render_template, request, send_file, jsonify, Response
-from mods import *
+from flask import render_template, request, jsonify, Response
 
 
 @app.route('/')

@@ -1,10 +1,9 @@
-import json
 import requests
 from urllib.parse import quote
+import xml.etree.ElementTree as ET
 
 from mods import *
 from web import app
-# from config import appcfgs
 
 
 def get_opendata(keyword, page_no, content_id):
@@ -27,8 +26,14 @@ def get_opendata(keyword, page_no, content_id):
     url += "&contentTypeId="+content_id
     url += "&keyword="+quote(keyword)
 
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+        root = ET.fromstring(response.text)
+        status_code = root[0][0].text
+    except Exception as e:
+        return ERROR_OPENDATA_ENGINE_ERROR, ERROR_OPENDATA_ENGINE_ERROR_MSG, ''
+    if status_code != '0000':
+        status_msg = root[0][2].text
+        return ERROR_OPENDATA_ENGINE_ERROR, status_msg, ''
 
-    result = response.text
-
-    return ERROR_CODE_SUCCESS, ERROR_CODE_SUCCESS_MSG, result
+    return ERROR_CODE_SUCCESS, ERROR_CODE_SUCCESS_MSG, response.text
