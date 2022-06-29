@@ -1,3 +1,4 @@
+import os
 import json
 
 from mods import *
@@ -40,3 +41,24 @@ def search_place():
     response = Response(json_string, content_type='application/json; charset=utf-8')
 
     return response, ERROR_CODE_SUCCESS
+
+
+@app.route('/file', methods=['POST'])
+def make_file():
+    try:
+        image = request.form['image']
+        image_type = request.form['type']
+        if image_type == 'storage':
+            image_name = image.filename
+        else:
+            image_name = request.form['filename']
+        _, file_ext = os.path.splitext(image_name)
+
+    except Exception as e:
+        return jsonify(status=ERROR_CODE_BAD_REQUEST, msg=ERROR_CODE_BAD_REQUEST_MSG), ERROR_CODE_BAD_REQUEST
+
+    status_code, msg = service.save_image(image, file_ext)
+    if status_code != 200:
+        return jsonify(status=status_code, msg=msg), status_code
+
+    return '저장 완료', status_code

@@ -20,6 +20,11 @@ $(function(){
         $('select[name=area]>option[value='+$(this).find('.areacode').val()+']').attr('selected', true);
         $('select[name=typeCode]>option[value='+$(this).find('.contenttype').val()+']').attr('selected', true);
         $('#placeImg').show();
+        if($(this).find('.firstimage').val()){
+            $('#save-img-btn').attr('disabled', false);
+        }else{
+            $('#save-img-btn').attr('disabled', true);
+        }
     })
 
     // 위도에 숫자와 점 이외의 값 입력 시 경고
@@ -108,14 +113,14 @@ function checkIntegrity(){
     }
     // 사진의 주소를 input 태그에 저장 TODO
     var imgPath = $('#placeImg').prop('src');
-    if(imgPath == 'http://localhost:8112/firstclass/insertForm.pl'){//이미지가 없는 경우 현재 주소 반환됨
+    if(imgPath == 'http://localhost:8112/firstclass/insertForm.pl'){ // 이미지가 없는 경우 현재 주소 반환됨
         alert('이미지를 등록해주세요!');
         return false;
     }else{
         $('input[name=imgPath]').val(imgPath);
     }
 
-    ajaxInsertData(data);
+//    ajaxInsertData(data);
     return true;
 }
 
@@ -127,8 +132,11 @@ function changeImg(picture){
         reader.onload = function(e){
             $('#placeImg').attr('src', e.target.result);
         }
-    }else
+        $('#save-img-btn').attr('disabled', false);
+    }else{
         $('#placeImg').attr('src', null);
+        $('#save-img-btn').attr('disabled', true);
+    }
     $('#placeImg').show();
 }
 
@@ -198,13 +206,26 @@ function clearAll(){
     $('textarea[name=placeDes]').val('');
 }
 
-// 일지를 저장 TODO
-function ajaxInsertData(result){
+// 이미지 저장 TODO
+function ajaxSaveImage(){
+    var formData = new FormData();
+    if($('#upfile')[0].files[0]){
+        formData.append('image', $('#placeImg').attr('src'));
+        formData.append('type', 'src');
+        formData.append('filename', $('#upfile').val());
+    }else{
+        formData.append('image', $('#upfile')[0].files[0]);
+        formData.append('type', 'storage');
+    }
+
     $.ajax({
-        url: 'insert',
-        type: 'post',
-        data: result,
-        success: function(){
+        url: 'file',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(result){
+            console.log(result);
         },
         error: function(){
         }

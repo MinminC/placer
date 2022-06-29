@@ -17,3 +17,7 @@ ERROR_OPENDATA_ENGINE_ERROR_MSG = 'Fail to OpenData Server.'
 # OpenData Engine Config(API-Key...) Error
 ERROR_OPENDATA_CONFIG_ERROR = 502
 ERROR_OPENDATA_CONFIG_ERROR_MSG = 'Check your Config.'
+
+# Image Process Error
+ERROR_IMGPROC_ERROR = 503
+ERROR_IMGPROC_ERROR_MSG = 'Image Process Error.'
