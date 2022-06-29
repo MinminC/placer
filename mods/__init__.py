@@ -9,3 +9,11 @@ ERROR_CODE_BAD_REQUEST_MSG = 'Bad Request.'
 # Server Error
 ERROR_UNKNOWN = 500
 ERROR_UNKNOWN_MSG = 'Unknown Error.'
+
+# OpenData Engine Error
+ERROR_OPENDATA_ENGINE_ERROR = 501
+ERROR_OPENDATA_ENGINE_ERROR_MSG = 'Fail to OpenData Server.'
+
+# OpenData Engine Config(API-Key...) Error
+ERROR_OPENDATA_CONFIG_ERROR = 502
+ERROR_OPENDATA_CONFIG_ERROR_MSG = 'Check your Config.'
